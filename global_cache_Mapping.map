@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><mappingRoot xmlns="http://www.ibm.com/2008/ccl/Mapping" domainID="com.ibm.msl.mapping.xml" domainIDExtension="mb" mainMap="true" targetNamespace="default" version="8.0.5.0" xmlns:map="default">
+    <input path="/incsv.xsd"/>
+    <output path="/dummy.xsd" var="var1"/>
+    <output path="jar:file://!com/ibm/msl/mapping/cache/xsds/cache.xsd" var="var2"/>
+    <namespaces>
+        <namespace kind="supplement" prefix="out" uri="http://www.ibm.com/msl/cache/1.0"/>
+    </namespaces>
+    <generation engine="xquery"/>
+    <mappingDeclaration name="global_cache_Mapping">
+        <input path="mb:msg(incsv,assembly,DFDL,Properties)" var="MessageAssembly"/>
+        <output path="$var1/mb:msg(dummy,assembly,DFDL,Properties)" var="MessageAssembly1"/>
+        <foreach>
+            <input path="$MessageAssembly/incsv/record" var="record"/>
+            <output path="$MessageAssembly1/dummy/record"/>
+            <cachePut>
+                <input path="$record/key" var="key1"/>
+                <input path="$record/value" var="value1"/>
+                <input path="$record/map" var="map"/>
+                <output path="$var2/CachePut"/>
+                <move>
+                    <input path="$key1/."/>
+                    <output path="Key"/>
+                </move>
+                <move>
+                    <input path="$value1/."/>
+                    <output path="Value"/>
+                </move>
+                <move>
+                    <input path="$map/."/>
+                    <output path="MapName"/>
+                </move>
+            </cachePut>
+            <move>
+                <input path="$record/key"/>
+                <output path="field1"/>
+            </move>
+            <move>
+                <input path="$record/value"/>
+                <output path="field2"/>
+            </move>
+        </foreach>
+    </mappingDeclaration>
+</mappingRoot>
